@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <id name="action_exit" />
+    <id name="action_share" />
+    <id name="action_tag" />
+    <id name="customViewContainer" />
+    <id name="imageView" />
+    <id name="progressBar" />
+    <id name="progress_indicator" />
+    <id name="webView" />
+</resources>
