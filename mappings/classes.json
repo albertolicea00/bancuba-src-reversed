@@ -4,7 +4,58 @@
     "apk_version": "1.3",
     "version_code": 2,
     "format": "obfuscated → clean mapping",
-    "notes": "Derived from static analysis of JADX decompiled source (pending initial decompilation)"
+    "notes": "Complete static mapping of BanCuba (Website 2 APK Builder Pro hybrid wrapper) from JADX 1.5.6 and Apktool 3.0.3"
   },
-  "classes": {}
+  "classes": {
+    "cu.bpa.bancuba.MainActivity": {
+      "clean": "cu.bpa.bancuba.MainActivity",
+      "role": "Single launcher Activity hosting the Website 2 APK Builder Pro WebView, 1500 ms splash overlay, license validation, URI scheme routing, file chooser, and JavaScript bridge",
+      "status": "reconstructed",
+      "confidence": "high",
+      "fields": {
+        "a": "webView",
+        "b": "splashImageView",
+        "c": "targetUrl",
+        "d": "targetHost",
+        "e": "progressBar",
+        "f": "webChromeClient",
+        "g": "activityContext",
+        "h": "doubleBackToExitPressedOnce",
+        "i": "TAG",
+        "j": "cameraPhotoPath",
+        "k": "legacyUploadMessage",
+        "l": "filePathCallback",
+        "m": "customViewContainer",
+        "n": "customViewCallback",
+        "o": "customView"
+      },
+      "methods": {
+        "a(String)": "md5WithSalt",
+        "a(Context)": "isLocationEnabled",
+        "b(String)": "handleExternalSchemeUrl",
+        "c(String)": "hasPermission",
+        "j()": "verifyBuilderLicenseOrRedirect",
+        "k()": "getApkBuildDate",
+        "l()": "createTempImageFile",
+        "m()": "computePackageHashPrefix",
+        "n()": "computeDeveloperIdHashSuffix",
+        "a()": "applyFullscreenMode",
+        "a(WebView)": "printWebViewPage",
+        "a(String, String, String)": "showCustomDialog",
+        "b()": "shouldRequestRuntimePermissions",
+        "c()": "requestRuntimePermissions",
+        "d()": "confirmOrExitApp",
+        "e()": "showDefaultAboutDialog",
+        "f()": "promptEnableGps",
+        "g()": "openPlayStoreListing",
+        "h()": "getAndroidDeviceId"
+      },
+      "inner_classes": {
+        "cu.bpa.bancuba.MainActivity$a": {
+          "clean": "cu.bpa.bancuba.MainActivity.Website2ApkJavascriptBridge",
+          "role": "JavascriptInterface exposed as window.Website2APK"
+        }
+      }
+    }
+  }
 }
