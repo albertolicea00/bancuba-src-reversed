@@ -1,0 +1,10 @@
+{
+  "_meta": {
+    "package": "cu.bpa.bancuba",
+    "apk_version": "1.3",
+    "version_code": 2,
+    "format": "obfuscated → clean mapping",
+    "notes": "Derived from static analysis of JADX decompiled source (pending initial decompilation)"
+  },
+  "classes": {}
+}
