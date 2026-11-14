@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+<meta charset="utf-8">
+	<title></title>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximun-scale=1.0, minimun-scale=1.0 ">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/estilos2.css"> 
+    <link rel="stylesheet" type="text/css" href="fonts/style.css"> 
+    <script src="js/jquery.js"></script>
+    <script src="js/obj_plazos_tasa_plazofijo.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+
+			$("#btncalcular").click(function(e) {
+   				  e.preventDefault();
+
+   		// para escoger en obj_plazos_tasa_plazofijo.js el interes por tipo de moneda
+   		var moneda='';
+          if ($("#moned").val()=='cup') {
+          	plazos_tasa=plazos_tasa_cup;
+          }
+
+          else if ($("#moned").val()=='cuc') {
+          	plazos_tasa=plazos_tasa_cuc;
+          }
+
+          else if ($("#moned").val()=='mlc') {
+          	plazos_tasa=plazos_tasa_mlc;
+          }
+		        //Llenar tabla con posibles mensualidades 
+		          
+		          var $tabla=$("#tabla_result").find('tbody');
+		           //vaciamos el cuerpo de la tabla
+		          $tabla.empty();
+		          //llenar el header
+		           $tabla.append(
+		                    $('<tr>').append(
+		                       $('<th>',{ 
+		                            text  : 'Posibles Plazos',
+		                            align : 'center',
+		                            colspan : '3',
+		                            class : 'success text-success'
+		                      })
+		                    ))
+		           $tabla.append(
+		                    $('<tr>').append(
+		                       $('<td>',{
+		                          text  : 'Plazos',
+		                          align : 'center',
+		                          class : 'success text-success'
+		                      }),
+		                      
+		                      $('<td>',{ 
+		                          text  : 'Interés Total',
+		                          align : 'center',
+		                          class : 'success text-success'
+		                      })
+		                    ))
+          
+          //Se recorre el objeto plazos_tasa definido en obj_plazos_tasa_plazofijo.js
+          
+          var cant = plazos_tasa.obj.length;
+          var plazo_mes=0;
+
+          for(i = 0 ; i < cant; i++ )
+            { 
+                plazo=plazos_tasa.obj[i].plazo;
+                tasa=plazos_tasa.obj[i].tasa;
+                mes=plazos_tasa.obj[i].mes;
+                //comprobar que sea un valor valido
+                monto=$("#monto").val();
+
+//CALCULAR DIAS EXACTOS----------------------
+var dias_ok=0;
+var e = new Date();
+var fecha_new = new Date();
+var hoy = new Date();
+
+e.setMonth(e.getMonth() + mes);
+
+var fechaInicio = new Date(hoy);
+var fechaFin    = new Date(e);
+
+var diff = fechaFin - fechaInicio;
+
+dias_ok = Math.round(diff/(1000*60*60*24));
+//---------------------------------------------------------
+
+
+                int_anual=monto * dias_ok *tasa/36000;
+                //int_anual=monto / plazo + monto * ((tasa/360)*365 / 12 / 100);
+                
+
+                    //agregamos una nueva fila con los datos del credito
+                    $tabla.append(
+                    $('<tr>').append(
+                       
+                      $('<td>',{ //plazos
+                          text  : mes + ' meses',
+                          align : 'center'
+                      }),
+                      
+                      $('<td>',{ //interes total
+                          text  : fmtIt(int_anual),
+                          align : 'center'
+                      })
+                    ))
+            }
+		/*		//Se muestran los resultados en la ventana modal
+          var _self = $(this);
+				
+				  cad='<span class="icon-arrow-right"></span>';
+				  cad+='<strong> Capacidad de pago:</strong>';
+				  cad+= ' $ '+capacpago;
+				  $("#capacidad").html(cad);
+
+          if (!puedepagar)
+            {
+                cad='<span class="icon-warning"></span>';
+                cad+='<strong> La Capacidad de Pago es menor que la Mensualidad ($ '+fmtIt(mens)+'). Disminuya el importe solicitado.</strong>';
+                $("#errorcapac").html(cad);
+                $("#errorcapac").show();
+            }
+          else
+          {$("#errorcapac").hide();}*/
+				
+        //$(_self.attr('href')).modal('show');
+			});
+		// Fin del script
+		})
+	
+	</script>
+</head>
+
+<body >
+<header id="menu" >
+	
+</header>
+
+<!-- JUMBOTRON -->
+<section class="jumbotron" >
+	<div class="container">
+	
+	<script type="text/javascript">
+   
+      function valideKey(evt)
+      {
+        var code = (evt.which) ? evt.which : evt.keyCode;
+      }
+
+      
+function valideKey(evt)
+      {
+        var code = (evt.which) ? evt.which : evt.keyCode;
+        if(code==8) 
+        {
+          //backspace
+          return true;
+        }
+        else if(code>=48 && code<=57) 
+        {
+          //is a number
+          return true;
+        }
+        else
+        {
+          return false;
+        }
+      } 
+  </script>	
+
+	</div>
+</section>
+
+
+<!-- MIGAS DE PAN -->
+<section class="main container " style="background-color: #fff;">
+	<div class="row">
+		<section class="posts col-md-12">
+			
+<!-- ARTICULOS -->
+<img src="images/contab.jpg" class="img-responsive">
+			<h2 align="" style="margin-top: 5px;">
+				<span class="label label-success2"><span class="icon-calculator"> </span>Plazo Fijo</span>
+			</h2>
+
+				<h4 align="">
+			    	<small>Cálculo de Interés según importe y plazos</small> 
+			    </h4>
+
+			<div class="panel panel-success">
+      		<div class="panel-heading"><strong>DATOS PRINCIPALES</strong></div>
+      		<div class="panel-body">
+
+<div class="form-group">
+<label class="control-label">Escoger el Tipo de Moneda:</label>
+<select class="form-control " id="moned" name="moned">
+<option value="0" selected="true"></option>
+  <option class="text-uppercase" value="cup">CUP (Peso Cubano)</option>
+ <option class="text-uppercase" value="cuc">CUC (Peso Cubano Convertible)</option>
+ <option class="text-uppercase" value="mlc">MLC (Moneda Libremente Convertible)</option>
+</select>
+</div>
+
+			<div class="form-group">
+      <label class="control-label">Importe a Depositar:</label>
+            <div class="input-group">
+               <span class="input-group-addon">$</span>
+               <input type="text" id="monto" class="form-control" onkeypress="return valideKey(event);" autofocus>
+               <span class="input-group-addon">.00</span>
+            </div> </div>
+
+		<div class="form-group">
+          <a href="#ventana1" class="btn btn-success2 btn-large" id="btncalcular" data-toggle="modal">CALCULAR <span class="icon-calculator2"></span></a>   
+        </div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+        <div class="modal fade" id="ventana1">
+          
+        <div class="modal-dialog" id="ventana1">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+             <!-- HEADER VENTANA -->
+            <div class="modal-header">
+        	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            	<h4 class="modal-title">Resultados</h4>
+            </div>
+              <!-- CONTENIDO VENTANA -->
+            <div class="modal-body">
+  				<div class="table-responsive">
+					<table id="tabla_result" class="table table-bordered table-hover table-condensed">
+	                	<tbody>
+	                 		<tr><td><td><td></td></td></td></tr>
+	                 	 </tbody>     
+	                </table>
+	        	</div>
+			</div>
+		    <!-- FOOTER VENTANA -->
+		    <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+		    </div>
+            </div>
+          </div>
+        
+          </div>
+
+      </div>
+        </div>
+        </div>
+
+        
+
+	    </section>
+
+
+</section>
+
+    
+ 
+<script src="js/bootstrap.min.js "></script> 
+<script src="js/val_num.js "></script>
+<script src="js/menu.js "></script>
+<script src="js/fmtIt.js"></script>
+</body>
+</html>

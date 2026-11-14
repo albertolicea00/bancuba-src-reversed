@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+<meta charset="utf-8">
+	<title></title>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximun-scale=1.0, minimun-scale=1.0 ">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/estilos2.css"> 
+    <link rel="stylesheet" type="text/css" href="fonts/style.css"> 
+    <script src="js/jquery.js"></script>
+    <script src="js/obj_prov.js"></script>
+    <script src="js/obj_mun.js"></script>
+    <script src="js/obj_suc.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+// Se llenan las provincias 
+        var cantprov=obj_prov.obj.length;
+          
+          var lista=$("#lista_prov");
+          for (i=0; i<cantprov; i++){
+            lista.append('<a id="'+obj_prov.obj[i].id+'" href="#ventana1" class="list-group-item" data-toggle="modal">'+obj_prov.obj[i].desc+'</a>');
+          }
+
+//Atachar un evento onclick a cada href de provincia para adicionar sus municipios
+        var a = document.getElementsByTagName("a");
+        for ( var i = 0; i < a.length; i++ ) {
+
+            a[i].onclick = function() { 
+
+              //LIMPIO LA LISTA
+              limpiarform();
+              //Encabezamiento con nombre de la provincia
+              var idprov=this.id; 
+              $("#header-modal").html(obj_prov.obj[idprov].desc+' <small><i>CÓDIGO('+obj_prov.obj[idprov].cod+')</small></i>');
+              
+              //Se listan todos los municipios y dentro sus sucursales
+              var obj_mun = eval('obj_munprov_'+idprov);
+              var cantmun = obj_mun.obj.length;
+              var lista_mun=$("#lista_mun");
+              for (i=0; i<cantmun; i++){
+                //list-group-item-danger
+                  lista_mun.append('<div class="limun label label-danger texto-dir">'+obj_mun.obj[i].desc+'</div>');
+
+                  var idmun=obj_mun.obj[i].id;
+                  //Agregar las sucursales
+
+                  var obj_suc = eval('obj_prov_'+idprov+'_mun_'+idmun);
+                  var cantsuc = obj_suc.obj.length;
+
+                  if (cantsuc>0)
+                  {
+                    for ( var j = 0; j < cantsuc; j++ ) { 
+                    // Create a new li wrapper for each var 
+                        lista_mun.append('<span class="limun thumbnail"><p class="text-success text-uppercase"><strong>- '+obj_suc.obj[j].tipo+' '+obj_suc.obj[j].suc+' '+obj_suc.obj[j].desc+'</strong><br> - <span class="text-primary">'+obj_suc.obj[j].dir+'</span><br> -<span class="text-warning"> Tlf. '+obj_suc.obj[j].tlf+'</span></span></p>'); 
+                    }
+                  }else{
+                    lista_mun.append('<span class="limun"><p class="text-success">--</span></span></p>'); 
+                  }
+
+                
+              }
+            }
+        } 
+
+
+        function limpiarform(){
+                //*********************************//
+                  //LIMPIANDO LA LISTA MUN   //
+                  //*********************************//
+
+                  // Find all <div> elements 
+                  var div = $(".limun");
+                  for ( var i = 0; i < div.length; i++ ) {
+                  // If the <div> has one class of 'warning'
+                  
+                  // Remove the <div> from the document
+                  div[i].parentNode.removeChild( div[i] );
+                  
+                  }
+        }
+		// Fin del script
+		})
+	
+	</script>
+</head>
+
+<body >
+<header id="menu" >
+	
+</header>
+
+<!-- JUMBOTRON -->
+<form action="" method="get" accept-charset="utf-8">
+  
+
+
+<section class="jumbotron" >
+	<div class="container">
+	
+		
+	</div>
+</section>
+
+
+<!-- MIGAS DE PAN -->
+<section class="main container ">
+	<div class="row text-center" align="center">
+			
+<!-- ARTICULOS -->
+<section class="posts col-md-12">
+			
+<img src="images/directorio.jpg" class="img-responsive">
+      <h2 align="left" style="margin-top: 5px;">
+        <span class="label label-success2"><span class="icon-book"> </span>Directorio BPA</span>
+      </h2>
+
+
+			<div class="panel panel-success" align="center">
+      	
+      		
+          <div class="panel-body" align="center">
+			<div id="prov">
+          <ul id="lista_prov" style="padding-left: 0px;">
+          <!-- Se llena arriba -->
+          </ul>
+      </div>
+       </div>
+       </div>
+      
+
+
+      <div class="modal fade" id="ventana1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;
+                    </button>
+                    <h4 id="header-modal" class="modal-title">Encabezado de la ventana 1</h4>
+                </div> 
+                <div id="cuerpo-modal" class="modal-body">
+                    <ul id="lista_mun">
+                <!-- Se llena arriba -->
+                    </ul>
+                </div> 
+                <div class="modal-footer">
+                    <button class="btn" type="button" data-dismiss="modal" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+      </div>
+		
+
+</section>
+</section>
+</form>
+
+
+
+ 
+<script src="js/bootstrap.min.js "></script> 
+<script src="js/menu.js "></script>
+<script src="js/fmtIt.js"></script>
+</body>
+</html>

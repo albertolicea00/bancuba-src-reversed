@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+<meta charset="utf-8">
+	<title></title>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximun-scale=1.0, minimun-scale=1.0 ">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/estilos2.css"> 
+    <link rel="stylesheet" type="text/css" href="fonts/style.css"> 
+	  <script src="js/jquery.js"></script>
+    <script src="js/obj_plazos_tasa_prestamofrances.js"></script>
+    
+
+
+<script type="text/javascript">
+  //Codigo a Ejecutar al Cargar la Pagina
+function myOnLoad() {
+ cargar_provincias()
+}
+
+// funcion para Cargar Provincias al campo <select>
+function cargar_provincias() {
+ var array = plazos_tasa.obj.plazo;
+
+ addOptions("plazos_ch", array);
+}
+
+// Rutina para agregar opciones a un <select>
+function addOptions(domElement, array) {
+ var select = document.getElementsByName(domElement)[0];
+
+var cantx = plazos_tasa.obj.length;
+
+ for (d = 1 ; d <= cantx; d++) {
+  var option = document.createElement("option");
+  /*if (plazos_tasa.obj[d].id != cantx) {}*/
+      option.text = plazos_tasa.obj[d].plazo+' Meses';
+      option.value=plazos_tasa.obj[d].tasa;
+  
+ /* else if (plazos_tasa.obj[d].id = cantx) {
+    option.text = plazos_tasa.obj[d].plazo+' Meses';
+    option.value=plazos_tasa.obj[d].tasa;
+  }*/
+
+  select.add(option);
+ }
+  
+
+}
+</script>
+
+    <script>
+    	
+    	$(document).ready(function () {
+
+        var plazos=0, tasa=0;
+        var plazot=0, tasat=0;
+
+    		$("#btncalcular").click(function(e) {
+   				e.preventDefault();
+          
+          var total=0;
+          var capacpago=0;
+          var mens=0;
+          var int=0;
+          var monto=0;
+          var deuda=0;
+
+          var salario=0;
+          var otrosing=0; 
+          var pagoresult=0; 
+          
+          var credito=0; 
+          var desc5=0; 
+          var otrosgastos=0;
+
+          //Sumo todos los inputs de sumas
+          /*$(".suma").each(function(index, value) {
+              if ( $.isNumeric( $(this).val() ) ){
+                suma += eval($(this).val());
+              }
+            })
+
+          //Sumo todos los inputs de restas
+          $(".resta").each(function(index, value) {
+              if ( $.isNumeric( $(this).val() ) ){
+                resta += eval($(this).val());
+              }
+            }) */
+
+            
+          //var mensajito='';
+
+          salario=parseFloat($(".salario").val());
+          otrosing=parseFloat($(".otrosing").val()); 
+          pagoresult=parseFloat($(".pagoresult").val()); 
+          
+          credito=parseFloat($(".credito").val()); 
+          desc5=parseFloat($(".desc5").val()); 
+          otrosgastos=parseFloat($(".otrosgastos").val());
+
+          //Verifico que los campos no esten vacios y en caso de estarlos les asigno cero
+          if (isNaN(salario)) {
+            salario=0;
+          }
+
+          if (isNaN(otrosing)) {
+            otrosing=0;
+          }
+
+          if (isNaN(pagoresult)) {
+            pagoresult=0;
+          }
+
+
+          if (isNaN(credito)) {
+            credito=0;
+          }
+
+          if (isNaN(desc5)) {
+            desc5=0;
+          }
+
+          if (isNaN(otrosgastos)) {
+            otrosgastos=0;
+          }
+
+          var sumax = 0.0;
+          var restax = 0.0;
+          var resultx = 0.0;
+
+          sumax = (salario + otrosing)*0.33;
+          restax = credito + desc5 + otrosgastos;
+          resultx = pagoresult*0.20;
+            
+          if (pagoresult!=0) {
+          //mensajito='CALCULO CAPACIDAD DE PAGO CON PAGO POR RESULTADOS';
+          total = sumax + resultx - restax;
+          }
+           
+          else if (pagoresult==0) {
+          //mensajito='CALCULO CAPACIDAD DE PAGO SIN PAGO POR RESULTADOS';
+          total = sumax - restax;
+          }
+           
+         
+          capacpago = Math.floor(total);
+          capacpago= fmtIt(capacpago);
+          
+
+          //Llenar tabla con posibles mensualidades 
+          var $tabla=$("#tabla_result").find('tbody');
+           //vaciamos el cuerpo de la tabla
+          $tabla.empty();
+          //llenar el header
+           $tabla.append(
+                    $('<tr>').append(
+                       $('<th>',{ 
+                            text  : 'Posible Mensualidad',
+                            align : 'center',
+                            colspan : '3'
+                      })
+                    ))
+           $tabla.append(
+                    $('<tr>').append(
+                       $('<th>',{ //fila con el numero de telefono
+                          text  : 'Mensualidad',
+                          align : 'center'
+                      }),
+                      $('<th>',{ //fila con el numero de telefono
+                          text  : 'Plazos',
+                          align : 'center'
+                      }),
+                      $('<th>',{ //fila para el boton de eliminar
+                          text  : 'Interés',
+                          align : 'center'
+                      })
+                    ))
+          
+          //Se recorre el objeto plazos_tasa definido en obj_plazos_tasa.js
+           monto=$("#monto").val();
+          var cant = plazos_tasa.obj.length;
+          puedepagar=false;
+          puedepagar2=false;
+          var tiempo=0;
+          var posicion=0;
+          tiempo=Math.ceil(monto/capacpago);
+          var pos2=0;
+          for(i = 0 ; i < cant; i++ )
+            { 
+                pos2=i+1;
+
+                plazo=plazos_tasa.obj[i].plazo;
+                tasa=plazos_tasa.obj[i].tasa;
+
+                //plazo2=plazos_tasa.obj[pos2].plazo;
+                //tasa2=plazos_tasa.obj[pos2].tasa;
+
+                if(tiempo>plazo)
+                {
+                  posicion=i;
+                }
+            } 
+
+            var interest=0;
+          plazot=plazos_tasa.obj[11].plazo;
+          tasat=plazos_tasa.obj[11].tasa;
+          interest=capacpago*plazot*27.94/100;
+          capacpago=Math.ceil(capacpago);
+          interest=Math.ceil(interest);               
+                //comprobar que sea un valor valido
+               
+                //mens=monto / plazo + monto * ((tasa/360)*365 / 12 / 100);
+                //mens=capacpago;
+                //var max=capacpago*plazot-interest;
+
+                /*if (monto <= max)
+                  {
+                    puedepagar2=true;
+                  }*/
+
+               /* if (mens <= capacpago)
+                  {
+                    puedepagar=true;
+                    //agregamos una nueva fila con los datos del credito
+                    $tabla.append(
+                    $('<tr>').append(
+                       $('<td>',{ //mensualidad
+                           text  : fmtIt(mens),
+                          align : 'center'
+                      }),
+                      $('<td>',{ //plazos
+                          text  : plazos_tasa.obj[posicion].plazo + ' meses',
+                          align : 'center'
+                      }),
+                      $('<td>',{ //interes
+                          text  : fmtIt(mens * plazos_tasa.obj[posicion].plazo-monto),
+                          align : 'center'
+                      })
+                    ))
+                  }*/
+
+
+//---------cuando conozco intplaz_real y no conozco decImp_Mensual --PARA CUANDO ESCOJO LOS PLAZOS EN LA APK-----
+var select2 = document.getElementById("plazos_ch"); //El <select>
+        var value = select2.value; //El valor seleccionado
+        var text = select2.options[select2.selectedIndex].innerText;
+//if (value!=0;) {}
+
+var decImp_Mensual=0; //
+var decmen_minima=capacpago; //ok
+var decimporte=monto; //ok
+
+var dectasa_int=value; //ok
+var cont=0;//
+var intplaz_real=0;//
+var mensaje_error='';//
+var mensaje_error1='';//
+var mensaje_error2='';//
+var decfactor=0;//
+var decmens=0;//
+var decplazos=0;//
+var decimp_interes=0;//
+var deuda_total=0;//
+
+if (monto==0) {
+ mensaje_error1='error'; 
+}
+
+if (capacpago==0) {
+ mensaje_error1='error'; 
+}
+
+if (value==0 ) {
+ mensaje_error1='error'; 
+}
+
+
+while(cont < 12){
+  if (dectasa_int == plazos_tasa.obj[cont].tasa) {
+   intplaz_real = plazos_tasa.obj[cont].plazo;
+  }
+  cont++;
+}
+
+var intplazos_max=plazos_tasa.obj[cont-1].plazo; //ok
+
+ //if $decImp_Mensual=0.00 AND $intplaz_real>0
+
+      decfactor=((1-(1/Math.pow((1+dectasa_int/1200),intplaz_real)))/(dectasa_int/1200));
+      decmens=decimporte/decfactor;
+      if (decmens>=decmen_minima){
+       mensaje_error='La mensualidad obtenida para los plazos deseados es mayor a la minima';
+      }
+      else{
+        if (Math.ceil(decmens)>Math.floor(decmens)){ //La mensualidad dio un valor no entero
+          decImp_Mensual=(Math.ceil(decmens));
+          decfactor=(decimporte/decImp_Mensual);
+          //Puede que los plazos sean diferentes a los deseados porque no se corresponda un valor de mensualidad entero para los mismos
+            decplazos=-1*(Math.log(1-decfactor*dectasa_int/1200)/Math.log(1/1+dectasa_int/1200));
+            decimp_interes=(decimporte*(decplazos-decfactor)/decfactor);
+
+          if (Math.ceil(decplazos)>Math.floor(decplazos) ){ //Los plazos dieron valor no entero
+          intplaz_real=Math.floor(decplazos)+1;
+          } 
+            
+          else{
+            intplaz_real=decplazos;
+          }
+        } 
+        
+        else{
+          decImp_Mensual=(decmens);
+          decimp_interes=(decimporte*(intplaz_real-decfactor)/decfactor);
+        }
+      }
+
+//--------------------FIN-----------------------------------------------
+
+
+            
+				//Se muestran los resultados en la ventana modal
+          var _self = $(this);
+				  deuda_total = parseFloat(monto) + parseFloat(decimp_interes);
+				  
+         if (mensaje_error1=='') { 
+          if (mensaje_error=='') {
+          cad='<span class="icon-checkmark"></span>';
+				  cad+='<strong> Capacidad de pago:</strong>';
+				  cad+= ' $ '+ fmtIt(decmen_minima);
+
+          cad+='<br><span class="icon-checkmark"></span>';
+          cad+='<strong> Mensualidad a Pagar:</strong>';
+          cad+= ' $ '+fmtIt(decImp_Mensual);
+
+          cad+='<br><span class="icon-checkmark"></span>';
+          cad+='<strong> Plazos a Amortizar:</strong>';
+          cad+= ' '+(text);
+
+          cad+='<br><span class="icon-checkmark"></span>';
+          cad+='<strong> Principal Solicitado:</strong>';
+          cad+= ' $ '+fmtIt(monto);
+
+          cad+='<br><span class="icon-checkmark"></span>';
+          cad+='<strong> Interés Total:</strong>';
+          cad+= ' $ '+fmtIt(decimp_interes);
+
+          cad+='<br><span class="icon-checkmark"></span>';
+          cad+='<strong> Deuda Total:</strong>';
+          cad+= ' $ '+fmtIt(deuda_total);
+          
+
+          /*cad+='<br><br><span class="icon-checkmark"></span>';
+          cad+='<strong> prueba:</strong>';
+          cad+=' '+value;*/
+
+				  $("#capacidad").html(cad);
+          $("#capacidad").show();
+
+          /*
+          cad1='<span class=" icon-bar-chart"></span>';
+          cad1+=' Ud. puede solicitar un importe máximo de:';
+          cad1+= '<strong> $ '+fmtIt(capacpago*plazot-interest);
+          cad1+='</strong> a pagar en <strong>'+plazot+' meses</strong>';
+
+          $("#techo").html(cad1);
+          $("#techo").show();*/
+          $("#techo").hide();
+          $("#errorcap").hide();
+          $("#errorcap2").hide();
+}
+          
+        else if (mensaje_error!='')
+            {
+                cad3='<span class="icon-warning"></span>';
+                cad3+='<i> La mensualidad obtenida para los plazos deseados ($ '+fmtIt(Math.ceil(decmens))+') es mayor a la capacidad de pago ($ '+fmtIt(decmen_minima)+'). Aumente los plazos.</i>';
+                $("#errorcap").html(cad3);
+                $("#errorcap").show();
+
+                 $("#techo").hide();
+                 $("#capacidad").hide();
+                 $("#errorcap2").hide();
+            }
+}            
+
+            else{
+              cad4='<span class="icon-warning"></span>';
+                cad4+='<i> Verifique los datos insertados.</i>';
+                $("#errorcap2").html(cad4);
+                $("#errorcap2").show();
+
+                 $("#techo").hide();
+                 $("#capacidad").hide();
+                 $("#errorcap").hide();
+
+            }
+
+				
+        //$(_self.attr('href')).modal('show');
+			});
+	});
+    </script>
+
+</head>
+
+<body onLoad="myOnLoad()">
+<header id="menu">
+	
+</header>
+
+<!-- JUMBOTRON -->
+<section class="jumbotron" >
+	<div class="container">
+	
+		
+	</div>
+</section>
+
+
+<!-- MIGAS DE PAN -->
+<section class="main container " style="background-color: #fff;">
+	<div class="row">
+		<section class="posts col-md-12">
+			
+<!-- ARTICULOS -->
+
+			<img src="images/contab.jpg" class="img-responsive">
+      <h2 align="" style="margin-top: 5px;">
+				<span class="label label-success2"><span class="icon-calculator"> </span>Préstamo Financiero</span>
+			</h2>
+
+				<h4 align="">
+			    	<small>Cálculo de Interés y Mensualidad</small> 
+			    </h4>
+			    
+<div class="alert alert-info " style="padding: 5px; margin-bottom: 5px;" align="">
+<span class=" icon-add" style="font-size: 20px; float: left;"> </span>
+<small><i> Esto solo es una muestra para su orientación, el otorgamiento del crédito se hace efectivo en nuestras sucursales.</i></small>
+</div>
+
+
+			 <div class="panel panel-success">
+      		 <div class="panel-heading"><strong>DATOS PRINCIPALES</strong></div>
+      		<div class="panel-body">
+
+<div class="alert alert-danger " style="padding: 5px; margin-bottom: 5px;" align="">
+<span class=" icon-checked" style="font-size: 20px; float: left;"> </span>
+<small><i> Recuerde que el el crédito se otorga en base a la menor capacidad de pago resultante entre solicitantes y fiadores.</i></small>
+</div>
+
+
+
+			<div class="form-group">
+      <label class="control-label">Importe Solicitado:</label>
+            <div class="input-group">
+               <span class="input-group-addon">$</span>
+               <input type="text" id="monto" class="form-control">
+               <span class="input-group-addon">.00</span>
+            </div> </div>
+
+<div class="alert alert-warning " style="padding: 5px; margin-bottom: 5px;" align="">
+<span class=" icon-error" style="font-size: 20px;float: left;"> </span> 
+<small><i>    La Mensualidad obtenida debe acercarse lo mayor posible a su capacidad de pago.</i></small>
+</div>
+
+<!--- SELECCIONO LOS PLAZOS CON EL INTERES -->
+<div class="form-group">
+<label class="control-label">Escoger Plazos Máximos de Pago:</label>
+ <select class="form-control" name="plazos_ch" id="plazos_ch">
+  <option value="0" selected="true"></option>
+ </select>
+</div>
+
+<!--- ESPECIFICAR OTRO PLAZO
+<div class="form-group">
+      <label class="control-label">Especifique otro Plazo de Pago:</label>
+      <input type="text" id="plazos_otro" class="form-control" placeholder="Escriba la cantidad de meses">
+</div>
+
+ -->
+
+
+		    </div>
+     		</div>
+
+           
+     		<div class="panel panel-success">
+      		 <div class="panel-heading"><strong>CAPACIDAD DE PAGO</strong></div>
+      		<div class="panel-body">
+
+      		<span class="badge">INGRESOS</span>
+
+			<div class="form-group"><label class="control-label">Ingresos Mensuales Fijos:</label>
+            <div class="input-group">
+               <span class="input-group-addon">$</span>
+               <input type="" name="salario" id="salario" class="salario form-control" value=0>
+               <span class="input-group-addon">.00</span>
+            </div> </div>
+           
+		<div class="form-group"><label class="control-label">Promedio Pago x Resultado:</label>
+            <div class="input-group">
+               <span class="input-group-addon">$</span>
+               <input type="" name="pagoresult" class="pagoresult form-control" value=0>
+               <span class="input-group-addon">.00</span>
+            </div> </div>
+
+
+    <div class="form-group"><label class="control-label">Otros Ingresos:</label>
+            <div class="input-group">
+               <span class="input-group-addon">$</span>
+               <input type="" name="otrosing" class="otrosing form-control" value=0>
+               <span class="input-group-addon">.00</span>
+            </div> </div>
+            
+            <span class="badge">GASTOS</span>
+
+			<div class="form-group"><label class="control-label">Créditos:</label>
+            <div class="input-group">
+               <span class="input-group-addon">$</span>
+               <input type="" name="credito" class="credito form-control" value=0>
+               <span class="input-group-addon">.00</span>
+            </div> </div>
+
+            <div class="form-group" style="margin-bottom: 2px;"><label class="control-label">Descuento del 5%:</label>
+            <div class="input-group">
+               <span class="input-group-addon">$</span>
+               <input type="" name="desc5" class="desc5 form-control" value=0>
+               <span class="input-group-addon">.00</span>
+            </div> </div><br>
+                      
+		<div class="form-group" style="margin-bottom: 2px;"><label class="control-label">Otros Gastos:</label>
+            <div class="input-group">
+               <span class="input-group-addon">$</span>
+               <input type="" name="otrosgastos" class="otrosgastos form-control" value=0>
+               <span class="input-group-addon">.00</span>
+            </div> </div>
+			<div class="alert alert-warning" style="padding: 5px; margin-bottom: 5px;" align="center"><span class="icon-warning" > </span><small><i>No incluir FORMACIÓN DE FONDOS</i></small></div>
+
+            </div>
+     		</div>
+
+
+
+        <div class="form-group">
+          <a href="#ventana1" class="btn btn-success2 btn-large" id="btncalcular" data-toggle="modal">CALCULAR <span class="icon-calculator2"></span></a>   
+        </div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+         <div class="modal fade" id="ventana1">
+          
+          <div class="modal-dialog" id="ventana1">
+
+          <div class="modal-dialog">
+             <div class="modal-content">
+             <!-- HEADER VENTANA -->
+              <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title">Resultados</h4>
+              </div>
+              <!-- CONTENIDO VENTANA -->
+              <div class="modal-body">
+                 
+
+              	<div id="capacidad" class="alert alert-success" style="padding: 5px; margin-bottom: 5px;"></div>
+                <div id="techo" class="alert alert-info" style="padding: 5px; margin-bottom: 5px;"></div>
+                <div id="errorcap" class="alert alert-danger" style="padding: 5px; margin-bottom: 5px;"></div>
+                <div id="errorcap2" class="alert alert-danger" style="padding: 5px; margin-bottom: 5px;"></div>
+
+        <!-- ponerlos ocultos a uno de los dos 
+
+          <div id="errorcapac" class="alert alert-danger"></div>
+
+        -->
+
+      <!--   <div class="table-responsive">
+          <table id="tabla_result" class="table table-bordered table-hover table-condensed">
+                <tbody>
+                 <tr><td><td><td></td></td></td></tr>
+                  </tbody>     
+                </table>
+        </div>
+      -->
+
+
+
+              </div>
+              <!-- FOOTER VENTANA -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+               
+              </div>
+            </div>
+          </div>
+        
+          </div>
+
+      </div>
+
+
+
+        
+
+
+	    </section>
+
+
+</section>
+
+
+
+
+ 
+<script src="js/jquery.js"></script> 
+<script src="js/bootstrap.min.js "></script> 
+<script src="js/menu.js "></script> 
+<script src="js/fmtIt.js"></script>
+
+</body>
+</html>
+
+</p>
