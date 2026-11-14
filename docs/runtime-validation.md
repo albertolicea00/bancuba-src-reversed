@@ -1,16 +1,12 @@
-# Local Android runtime validation
+# Runtime Validation
 
-Target: `cu.bpa.bancuba-v2.apk`, SHA-256
-`e694d0f58f8ad3e6f964d76069b1371c5ee89fb5230276f151d7e95359062de3`.
+Scope and status of dynamic/runtime validation for **BanCuba** (`cu.bpa.bancuba` v1.3, `versionCode` `2`).
 
-## Scope and safety rules
+## Static vs. Dynamic Scope
 
-When performing dynamic or hybrid-APK validation in an Android emulator:
-
-1. Use an isolated Android Virtual Device (AVD) dedicated to research.
-2. Disable external network connectivity during emulator inspection.
-3. Keep all modified/hybrid APKs, UI hierarchy dumps, screenshots, and logcat captures inside `.workspace/` (excluded from Git).
-
-## Observed results
-
-Pending decompilation and initial static analysis. Record emulator environment, API level, startup behavior, and screen hierarchy comparisons here once dynamic checks are performed.
+- **Static verification completed**:
+  - `make verify` confirmed package `cu.bpa.bancuba`, `versionName` `1.3`, `versionCode` `2`, `minSdkVersion` `14`, `targetSdkVersion` `27`, `compileSdkVersion` `23`, and APK SHA-256 `e694d0f58f8ad3e6f964d76069b1371c5ee89fb5230276f151d7e95359062de3`.
+  - JADX 1.5.6 decompiled 100% of DEX classes (0 errors).
+  - Apktool 3.0.3 decoded `AndroidManifest.xml`, XML resources, smali, and all HTML/JS/CSS assets cleanly.
+- **Outstanding runtime checks**:
+  - Emulator/device execution of `prestamo_frances.html` and `plazo_fijo.html` to confirm WebView rendering and verify the `Website 2 APK Builder Pro` 30-day installer-package check (`verifyBuilderLicenseOrRedirect()`).

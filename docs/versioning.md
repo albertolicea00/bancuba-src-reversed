@@ -40,6 +40,12 @@ Once `make decompile` has been executed, archive the local `smali/` directory as
 unzip .workspace/archives/smali-1.3.2.zip -d .
 ```
 
+### Recorded Baseline Hashes (`1.3.2-v1.0`)
+
+- **Target APK**: `cu.bpa.bancuba-v2.apk` — SHA-256: `e694d0f58f8ad3e6f964d76069b1371c5ee89fb5230276f151d7e95359062de3`
+- **Local Smali Archive**: `.workspace/archives/smali-1.3.2.zip` — SHA-256: `255276ef162f35bc4928034ce703f2762d44c2423c0b77c8e1f1a09672f0e8bd`
+- **Tools**: `jadx 1.5.6`, `apktool 3.0.3`
+
 Record the APK SHA-256, archive SHA-256, and decompiler versions for each target. Local ZIPs may later be uploaded as Release assets; APK binaries remain local.
 
 ## Comparing APK Releases
