@@ -8,3 +8,7 @@
 - Created full 12-document template set in `docs/` (`target-metadata.md`, `versioning.md`, `architecture.md`, `calculators.md`, `networking.md`, `security.md`, `storage.md`, `domain-model.md`, `reconstruction-inventory.md`, `unmapped-source-review.md`, `java-compilation.md`, `runtime-validation.md`).
 - Updated `README.md`, `AGENTS.md`, and `TODO.md` with documentation links and reference links (`bpa.cu`, `APK_Bancuba` on EcuRed, Apklis).
 - Added a `Related Repositories` cross-reference table in `README.md` linking all six Cuban Android reverse-engineering repositories.
+- Decompiled `cu.bpa.bancuba-v2.apk` with JADX 1.5.6 and Apktool 3.0.3 into `src/`, `app/AndroidManifest.xml`, `app/res/`, and text-based `app/assets/` (HTML/CSS/JS), and archived local `smali/` to `.workspace/archives/smali-1.3.2.zip` (SHA-256: `255276ef162f35bc4928034ce703f2762d44c2423c0b77c8e1f1a09672f0e8bd`).
+- Reconstructed clean `app/src/main/java/cu/bpa/bancuba/MainActivity.java` (1,106 lines, including `Website2ApkJavascriptBridge`) and mapped `MainActivity` and `MainActivity$a` in `mappings/classes.json`.
+- Completed static analysis across `docs/architecture.md`, `docs/calculators.md`, `docs/domain-model.md`, `docs/networking.md`, `docs/security.md`, `docs/storage.md`, `docs/unmapped-source-review.md`, `docs/java-compilation.md`, `docs/runtime-validation.md`, and `docs/versioning.md`.
+- Prepared release baseline `1.3.2-v1.0`.
