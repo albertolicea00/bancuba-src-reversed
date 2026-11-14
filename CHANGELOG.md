@@ -12,3 +12,4 @@
 - Reconstructed clean `app/src/main/java/cu/bpa/bancuba/MainActivity.java` (1,106 lines, including `Website2ApkJavascriptBridge`) and mapped `MainActivity` and `MainActivity$a` in `mappings/classes.json`.
 - Completed static analysis across `docs/architecture.md`, `docs/calculators.md`, `docs/domain-model.md`, `docs/networking.md`, `docs/security.md`, `docs/storage.md`, `docs/unmapped-source-review.md`, `docs/java-compilation.md`, `docs/runtime-validation.md`, and `docs/versioning.md`.
 - Prepared release baseline `1.3.2-v1.0`.
+- Updated `scripts/update-progress.py` and `README.md` to reflect real decompilation and reconstruction progress (`23/25` TODO tasks = `92%`, `1/2` exact source links = `50%`, overall `71%`), noting the core UI/logic is bundled HTML/JS in `app/assets/`.

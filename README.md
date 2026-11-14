@@ -6,12 +6,12 @@
 ![Target SDK](https://img.shields.io/badge/Target%20SDK-27-green?style=flat-square)
 ![Last Update](https://img.shields.io/badge/Last%20Update-November%202026-lightgrey?style=flat-square)
 
-<!-- 50 blocks; each full block = 2% of TODO tasks --> <!-- do not delete this progress-bar-->
-<span style="white-space: nowrap;"><code>[██████████████████████████████████████████████░░░░] 92%</code></span>
+<!-- 50 blocks; each full block = 2% of overall progress --> <!-- do not delete this progress-bar-->
+<span style="white-space: nowrap;"><code>[███████████████████████████████████░░░░░░░░░░░░░░░] 71%</code></span>
 
-**Task-list progress: 23/25 completed; 2 pending.** Tasks have equal weight. This is not verified code coverage or a working-app percentage. The value can fall when scope grows. Run `make progress` or `make inventory` to refresh it from [TODO.md](TODO.md).
+**Task-list progress: 23/25 (92%) completed; 2 pending. Source reconstruction: 1/2 (50%).** Tasks have equal weight and overall progress averages task-list completion with exact source links. This is not verified code coverage or a working-app percentage. The value can fall when scope grows. Run `make progress` or `make inventory` to refresh it from [TODO.md](TODO.md) and `scripts/mapping-stats.sh`.
 
-**Main-package exact source links: 0/0 (0% — pre-decompilation).** This counts original Java classes with one exact clean-source candidate; it does not verify implementation completeness. The [reconstruction inventory](docs/reconstruction-inventory.md) reports current counts, and the [unlinked-source review ledger](docs/unmapped-source-review.md) tracks per-source classifications once `make decompile` has been executed.
+**Main-package exact source links: 1/2 (50% — 1 clean Java wrapper file, 1 unlinked inner/support class, 0 mapping issues).** This counts original Java classes in `src/` with one exact clean-source candidate (the core UI and financial calculator logic are bundled HTML/CSS/JS in `app/assets/`); it does not verify implementation completeness. The [reconstruction inventory](docs/reconstruction-inventory.md) reports current counts, and the [unlinked-source review ledger](docs/unmapped-source-review.md) tracks per-source classifications.
 
 ## Overview
 
