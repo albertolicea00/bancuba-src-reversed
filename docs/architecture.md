@@ -1,28 +1,34 @@
 # Architecture Overview
 
-Target: `cu.bpa.bancuba` v1.3 (versionCode `2`), SHA-256 `e694d0f58f8ad3e6f964d76069b1371c5ee89fb5230276f151d7e95359062de3`.
+Static architectural analysis of **BanCuba** (`cu.bpa.bancuba`, version `1.3`, `versionCode` `2`), an offline-first banking guide and financial calculator published by **Banco Popular de Ahorro (BPA)** in Granma, Cuba.
 
-> [!NOTE]
-> **Status:** Pre-decompilation baseline. Only APK badging metadata (`aapt2 dump badging`) has been extracted so far. Run `make decompile` to populate `src/`, `smali/`, `app/res/`, `app/assets/`, and `app/AndroidManifest.xml`.
+## Application Wrapper
 
-## Build & Package Properties
+Rather than a native multi-screen Android application, BanCuba is built using the **Website 2 APK Builder Pro** hybrid wrapper template (`MainActivity.java` + `MainActivity$a`), bundling an HTML5/CSS3/Bootstrap/jQuery portal inside `assets/`.
 
-| Property | Value |
-| :--- | :--- |
-| **Package Name** | `cu.bpa.bancuba` |
-| **Version Name** | `1.3` |
-| **Version Code** | `2` |
-| **Compile SDK** | `23` (Android 6.0) |
-| **Min SDK** | `14` (Android 4.0) |
-| **Target SDK** | `27` (Android 8.1) |
-| **APK Size** | ~6.5 MB |
+| Attribute | Value |
+|---|---|
+| Package | `cu.bpa.bancuba` |
+| Version | `1.3` (`versionCode` `2`) |
+| Min / Target / Compile SDK | `14` / `27` / `23` |
+| DEX Classes | 17 (`MainActivity`, inner classes, and `R` subclasses) |
+| Launcher Activity | `cu.bpa.bancuba.MainActivity` (portrait, `adjustResize`) |
+| Entry URL | `file:///android_asset/index.html` |
+| Splash Duration | `1500` ms (`R.integer.duration`) |
 
-## Declared Permissions (from `aapt2 dump badging`)
+## Manifest Components & Permissions
 
-- Network: `INTERNET`, `ACCESS_NETWORK_STATE`
+- **Activities**: Single exported launcher activity `cu.bpa.bancuba.MainActivity` (`android.intent.action.MAIN` + `LAUNCHER`).
+- **Services / Receivers / Providers**: None.
+- **Permissions**:
+  - `android.permission.INTERNET`
+  - `android.permission.ACCESS_NETWORK_STATE`
+- **Runtime permission requests**: On API > 23, `MainActivity.requestRuntimePermissions()` requests `READ_EXTERNAL_STORAGE`, `WRITE_EXTERNAL_STORAGE`, `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`, `RECORD_AUDIO`, and `CAMERA` (request code `200`). Because none of those permissions are declared in `AndroidManifest.xml`, Android automatically denies them without prompting.
 
-## Pending Analysis Sections (Post-Decompilation)
+## Bundled Web Assets (`app/assets/`)
 
-- **Manifest Components:** Activities, fragments, services, permissions, and exported flags.
-- **Native Java vs. Hybrid/WebView Architecture:** Determine whether screens and calculators are implemented in native Java or bundled HTML/JS assets in `app/assets/`.
-- **Bundled Assets & Directories:** Inspect `app/assets/` and `app/res/`.
+The UI and business logic live in local web assets:
+
+- **13 HTML pages**: `index.html`, `prestamo_frances.html`, `plazo_fijo.html`, `directorio_sucursal.html`, `directorio_atm.html`, `belect.html`, `transfer.html`, `doc_cred.html`, `manual_atm.html`, `prod_serv.html`, `contacto.html`, `404r.html` (12 top-level pages).
+- **21 JS files**: `jquery.js`, `bootstrap.min.js`, `obj_plazos_tasa_prestamofrances.js`, `obj_plazos_tasa_plazofijo.js`, `obj_prov.js`, `obj_mun.js`, `obj_suc.js`, `nsuc.js`, `fmtIt.js`, `val_num.js`, `validaciones.js`, `menu.js`, `arriba.js`, plus backup copies (`--obj_prov_orig.js`, `--obj_suc_orig.js`, `mun - copia.js`, `nsuc - copia.js`, `obj_mun_orig.js`).
+- **8 CSS files**: Bootstrap 3, `estilos2.css`, Font Awesome, and IcoMoon (`fonts/style.css`).

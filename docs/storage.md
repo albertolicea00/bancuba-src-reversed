@@ -1,12 +1,11 @@
-# Local Storage & Institutional Directories
+# Local Storage
 
-Target: `cu.bpa.bancuba` v1.3 (versionCode `2`).
+BanCuba (`cu.bpa.bancuba`) does not use SQLite databases, Room, or `SharedPreferences` in Java code.
 
-> [!NOTE]
-> **Status:** Structural template (pending decompilation). Document bundled SQLite/JSON/XML/HTML directories and `SharedPreferences` once decompiled.
+## Storage Mechanisms
 
-## Pending Analysis Sections
-
-- **Institutional Directory Datasets:** Provincial BPA branch offices (addresses, phone numbers, branch codes) and ATM (cajeros automáticos) locations.
-- **Banking Reference Content:** Personal loan requirements, banking procedures, ATM operation guides, and electronic banking reference materials.
-- **Local Persistence:** SQLite databases, asset files, or `SharedPreferences` used by the app.
+1. **Bundled Static Assets (`app/assets/`)**:
+   - All reference catalogs (provinces, municipalities, BPA branches, ATMs, fixed-term deposit rates, French loan rates) are stored as static JavaScript files under `app/assets/js/`.
+2. **WebView Storage**:
+   - `MainActivity.onCreate()` enables WebView DOM storage (`setDomStorageEnabled(true)`), Web SQL database directory (`setDatabaseEnabled(true)` at `getDir("database", 0)`), and `CookieManager` / `AppCache` (`/data/datacu.bpa.bancuba/cache` — note the missing slash in the upstream Website 2 APK Builder template).
+   - None of the bundled HTML pages persist user financial data remotely.
